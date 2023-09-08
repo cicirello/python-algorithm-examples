@@ -1,6 +1,6 @@
 # python-algorithm-examples
 
-Copyright (C) 2002-2023 [Vincent A. Cicirello](https://www.cicirello.org/).
+Copyright (C) 2023 [Vincent A. Cicirello](https://www.cicirello.org/).
 
 ## About
 
