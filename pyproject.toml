@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "python-algorithm-examples"
+version = "0.0.1"
+authors = [
+  { name="Vincent A. Cicirello", email="development@cicirello.org" },
+]
+description = "Examples of algorithms in Python"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Topic :: Other/Nonlisted Topic",
+    "Topic :: Scientific/Engineering",
+	"Topic :: Education",
+]
+keywords = [
+    "data structures",
+    "algorithms",
+]
+
+[project.urls]
+"GitHub Repository" = "https://github.com/cicirello/python-algorithm-examples"
+"Bug Tracker" = "https://github.com/cicirello/python-algorithm-examples/issues"
+"Changelog" = "https://github.com/cicirello/python-algorithm-examples/blob/main/CHANGELOG.md"
+
+[tool.hatch.build]
+exclude = [
+    "/.github",
+    "/tests",
+]
