@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from timeit import timeit
+import timeit
 
 def fibonacci_exponential(n):
     """Computes the n-th number in the Fibonacci sequence, using the naive
@@ -210,15 +210,15 @@ def time_fibonacci(
         template = template_no_exp 
         t_exponential = "N/A"
         if include_exponential:
-            t_exponential = timeit(
+            t_exponential = timeit.timeit(
                 lambda : fibonacci_exponential(n),
                 number = repetitions)
             template = template_all
             include_exponential = t_exponential < time_cutoff_exponential
-        t_linear = timeit(
+        t_linear = timeit.timeit(
             lambda : fibonacci_linear(n),
             number=repetitions)
-        t_logarithmic = timeit(
+        t_logarithmic = timeit.timeit(
             lambda : fibonacci_logarithmic(n),
             number=repetitions)
         print(template.format(n, t_exponential, t_linear, t_logarithmic))
