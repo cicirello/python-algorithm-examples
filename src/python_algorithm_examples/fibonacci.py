@@ -155,19 +155,47 @@ def fibonacci_logarithmic(n):
         y2 = y * y
         x, y, z = x * x + y2, x * y + y * z, z * z + y2
     return f
-    
-def time_fibonacci(n_max = 1048576, repetitions = 1, time_cutoff_exponential = 1):
-    """Runs a little timing experiment to demonstrate runtime of the three
-    algorithms.
+
+def time_fibonacci_low_n(repetitions = 1, time_cutoff_exponential = 1.0):
+    """Runs a timing experiment to deminstrate runtime of the three algorithms
+    on low values of n, i.e., values of n such that the corresponding Fibonacci
+    number is representable by a 32-bit signed int. Specifically, this considers
+    values of n from 1 to 46.
 
     Keyword arguments:
-    n_max - consider cases of n no greater than this value.
     repetitions - this value is passed as number to timeit. Be careful what you use
         here as the times grow quickly. The default of 1 should be fine.
     time_cutoff_exponential - once the time for the exponential algorithm exceeds
         this value, it will just compare the other two.
     """
-    n = 1
+    time_fibonacci(
+        n_min = 1,
+        n_max = 46,
+        n_update = lambda n_old : n_old + 1,
+        repetitions = repetitions,
+        time_cutoff_exponential = time_cutoff_exponential
+    )
+    
+def time_fibonacci(
+    n_min = 1,
+    n_max = 1048576,
+    n_update = lambda n_old : 2 * n_old,
+    repetitions = 1,
+    time_cutoff_exponential = 0.4):
+    """Runs a timing experiment to demonstrate runtime of the three
+    algorithms.
+
+    Keyword arguments:
+    n_min - first value of n to consider.
+    n_max - consider cases of n no greater than this value.
+    n_update - a function to determine next value of n based on current
+        value of n. This function is assumed to increase values of n.
+    repetitions - this value is passed as number to timeit. Be careful what you use
+        here as the times grow quickly. The default of 1 should be fine.
+    time_cutoff_exponential - once the time for the exponential algorithm exceeds
+        this value, it will just compare the other two.
+    """
+    n = n_min
     include_exponential = True
     template_all = "{0:11d} {1:11.8f} {2:11.8f} {3:11.8f}"
     template_no_exp = "{0:11d} {1:>11s} {2:11.8f} {3:11.8f}"
@@ -194,4 +222,4 @@ def time_fibonacci(n_max = 1048576, repetitions = 1, time_cutoff_exponential = 1
             lambda : fibonacci_logarithmic(n),
             number=repetitions)
         print(template.format(n, t_exponential, t_linear, t_logarithmic))
-        n *= 2
+        n = n_update(n)
