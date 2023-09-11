@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### CI/CD
 
 
+## [0.1.2] - 2023-09-11
+
+### Fixed
+* Improvements to importing from modules.
+
+
 ## [0.1.1] - 2023-09-11
 
 ### Changed

@@ -15,3 +15,8 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+from .fibonacci import (
+    fibonacci_exponential, fibonacci_linear, fibonacci_logarithmic,
+    time_fibonacci_low_n, time_fibonacci
+)
