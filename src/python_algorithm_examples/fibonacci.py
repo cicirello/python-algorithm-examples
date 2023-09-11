@@ -25,20 +25,25 @@ def fibonacci_exponential(n):
     Note: For simplicity, this ignores negative n, for which the basic form of
     the sequence is undefined.
 
-    Runtime:
+    Runtime (assuming additions are constant time):
     A simplistic analysis of the runtime leads to O(2**n). The number of
-    additions is exponential in n, and making the naive assumption that the
-    values we are dealing with are small (e.g., 32-bit integers), additions are
-    constant, so we have a runtime of O(2**n).
+    additions is O(2**n). If we make the naive assumption that the integers
+    we are adding are small (e.g., 32-bit integers), then we can assume that
+    addition is a constant time operation. Thus, the runtime of O(2**n) under
+    this assumption. Note that this assumption holds for n <= 46.
 
-    For large enough n, the additions will be of integers not representable in the
-    word-size of your system. The Fibonacci sequence grows rapidly, so addition
-    shouldn't be assumed a constant time operation. The runtime to add integers
-    is O(log m), where m is the value of the sum. Since the Fibonacci numbers grow
-    exponentially, log(Fib_n) = O(n), thus the additions that take place have a
-    runtime that grows linearly in n.
-
-    Thus the runtime is actually O(n * 2**n).
+    Runtime (no assumptions on magnitude of n):
+    For large enough n (specifically n > 46), the additions we'll encounter
+    will not be a constant time operation. Python ints are objects that can
+    represent integers of arbitrary magnitude. Addition of two m-bit integers
+    requires O(m) time. The Fibonacci sequence grows exponentially. We can
+    bound the n-th Fibonacci number Fib_n above by O(2**n). The number of bits
+    m needed to represent Fib_n is thus m = O(lg Fib_n) = O(lg (2**n)) = O(n).
+    Thus, the runtime for the additions is linear in n, and not a constant time
+    operation.
+    
+    Thus the runtime is O(n * 2**n), if we allow for computing Fibonacci
+    numbers of arbitrary magnitude.
 
     Keyword arguments:
     n - computes the n-th Fibonacci number.
@@ -48,27 +53,32 @@ def fibonacci_exponential(n):
     return fibonacci_exponential(n-1) + fibonacci_exponential(n-2)
 
 def fibonacci_linear(n):
-    """Computes the n-th number in the Fibonacci sequence, using a simple linear
-    iteration over the sequence.
+    """Computes the n-th number in the Fibonacci sequence, using a simple
+    linear iteration over the sequence.
 
     Note: For simplicity, this ignores negative n, for which the basic form of
     the sequence is undefined.
 
-    Runtime:
-    Under the naive assumption that the values we are dealing with are small (e.g.,
-    32-bit integers), this algorithm's runtime is O(n). It performs O(n) additions,
-    and this naive assumption means that addition is constant time. Thus, runtime
-    under this naive assumption is O(n).
+    Runtime (assuming additions are constant time):
+    A simplistic analysis of the runtim is O(n). It performs O(n) additions.
+    If we make the naive assumption that the integers we are adding are small
+    (e.g., 32-bit integers), then we can assume that addition is a constant
+    time operation. Thus, the runtime of O(n) under this assumption. Note
+    that this assumption holds for n <= 46.
+    
+    Runtime (no assumptions on magnitude of n):
+    For large enough n (specifically n > 46), the additions we'll encounter
+    will not be a constant time operation. Python ints are objects that can
+    represent integers of arbitrary magnitude. Addition of two m-bit integers
+    requires O(m) time. The Fibonacci sequence grows exponentially. We can
+    bound the n-th Fibonacci number Fib_n above by O(2**n). The number of bits
+    m needed to represent Fib_n is thus m = O(lg Fib_n) = O(lg (2**n)) = O(n).
+    Thus, the runtime for the additions is linear in n, and not a constant time
+    operation.
 
-    For large enough n, the additions will be of integers not representable in the
-    word-size of your system. The Fibonacci sequence grows rapidly, so addition
-    shouldn't be assumed a constant time operation. The runtime to add integers
-    is O(log m), where m is the value of the sum. Since the Fibonacci numbers grow
-    exponentially, log(Fib_n) = O(n), thus the additions that take place have a
-    runtime that grows linearly in n.
-
-    Thus, the runtime of this "linear" algorithm is not so linear, and is instead
-    quadratic: O(n**2), since we are doing O(n) additions, and additions cost O(n).
+    Thus, the runtime of this "linear" algorithm is not so linear, and is
+    actually quadratic: O(n**2), since we are doing O(n) additions, and
+    additions cost O(n). Only the low-n case is linear.
 
     Keyword arguments:
     n - computes the n-th Fibonacci number.
@@ -91,32 +101,42 @@ def fibonacci_logarithmic(n):
     Note: For simplicity, this ignores negative n, for which the basic form of
     the sequence is undefined.
 
-    Runtime:
-    Under the naive assumption that the values we are dealing with are small (e.g.,
-    32-bit integers), this algorithm's runtime is O(lg n).
+    Runtime (assuming addition and multiplication are constant time):
+    A simplistic analysis of the runtim is O(lg n). It performs O(lg n)
+    additions and mulitplications. If we make the naive assumption that the
+    integers we are adding and multiplying are small (e.g., 32-bit integers),
+    then we can assume that addition and multiplication are constant time
+    operations. Thus, the runtime is O(lg n) under this assumption. Note
+    that this assumption holds for n <= 46.
 
-    It performs O(lg n) additions and mulitplications, and this naive assumption
-    means that both operations are constant time. Thus, runtime under this naive
-    assumption is O(lg n).
+    Runtime (no assumptions on magnitude of n):
+    For large enough n (specifically n > 46), the additions and multiplications
+    will not be constant time operations. Python ints are objects that can
+    represent integers of arbitrary magnitude. Addition of two m-bit integers
+    requires O(m) time. Mulitplication is more costly than addition. The runtime
+    to multiply two m-bit integers depends upon the algorithm used. Currently,
+    Python uses Karatsuba's multiplication algorithm when multiplying very
+    large integers. The runtime of Karatsuba's algorithm is approximately
+    O(m**1.58) to multiply m-bit integers. The Fibonacci sequence grows
+    exponentially. We can bound the n-th Fibonacci number Fib_n above by
+    O(2**n). The number of bits m needed to represent Fib_n is thus m =
+    O(lg Fib_n) = O(lg (2**n)) = O(n). Thus, the runtime for the
+    multiplications is O(n**1.58).
 
-    For large enough n, the additions will be of integers not representable in the
-    word-size of your system. The Fibonacci sequence grows rapidly, so addition
-    shouldn't be assumed a constant time operation. The runtime to add integers
-    is O(log m), where m is the value of the sum. Since the Fibonacci numbers grow
-    exponentially, log(Fib_n) = O(n), thus the additions that take place have a
-    runtime that grows linearly in n. 
+    Thus, the runtime of this "logarithmic" time algorithm is not so
+    logarithmic. Its runtime is O(n**1.58 lg(n)). It performs O(lg(n))
+    additions that cost O(n), for total cost of additions: O(n log n). It
+    performs O(lg n) multiplications that cost O(n**1.58) for total cost of
+    multiplications: O(n**1.58 lg(n)). Thus, the runtime is O(n**1.58 lg(n)).
+    Only the low-n case is logarithmic.
 
-    The runtime for the multiplications is a bit more complex. To multiply integers
-    of magnitude m, the runtime is approximately O((log m)**1.58), assuming Karatsuba's
-    multiplication algorithm, which is what Python uses for very large numbers. Due
-    to the square and multiply approach, we never multiply integers larger than
-    the sqrt(Fib_n). Thus the worst multiplication runs in O((log sqrt(Fib_n))**1.58)
-    time. An upperbound for this is O(n**1.58) for the worst of the multiplications.
-
-    Thus, the runtime of this "logarithmic" time algorithm is not so logarithmic. Its
-    runtime is O(n**1.58 lg(n)). It performs O(lg(n)) additions that cost O(n), for
-    total cost of additions: O(n log n). It performs O(lg n) multiplications that cost
-    O(n**1.58) for total cost of multiplications: O(n**1.58 lg(n)).
+    Note that the O(n**1.58 lg(n)) of this algorithm is lower order than the
+    quadratic runtime of the "linear" algorithm. Thus, this "logarithmic"
+    algorithm should be the fastest of the three considered here for large
+    values of n. However, the constant factors that O() hides are more
+    substantial for this "logarithmic" algorithm than for the "linear" one, so
+    you will likely find the "linear" algorithm faster than this one for the
+    low n case.
 
     Keyword arguments:
     n - computes the n-th Fibonacci number.
@@ -156,17 +176,18 @@ def fibonacci_logarithmic(n):
         x, y, z = x * x + y2, x * y + y * z, z * z + y2
     return f
 
-def time_fibonacci_low_n(repetitions = 1, time_cutoff_exponential = 1.0):
+def time_fibonacci_low_n(repetitions = 1000000, time_cutoff_exponential = 2.0):
     """Runs a timing experiment to deminstrate runtime of the three algorithms
     on low values of n, i.e., values of n such that the corresponding Fibonacci
     number is representable by a 32-bit signed int. Specifically, this considers
     values of n from 1 to 46.
 
     Keyword arguments:
-    repetitions - this value is passed as number to timeit. Be careful what you use
-        here as the times grow quickly. The default of 1 should be fine.
-    time_cutoff_exponential - once the time for the exponential algorithm exceeds
-        this value, it will just compare the other two.
+    repetitions - this value is passed as number to timeit. The "linear" and
+        "logarithmic" algorithms are quite fast, so the default is set high
+        at 1000000 to get better measurements.
+    time_cutoff_exponential - once the time for the exponential algorithm
+        exceeds this value, it will just compare the other two.
     """
     time_fibonacci(
         n_min = 1,
@@ -190,10 +211,11 @@ def time_fibonacci(
     n_max - consider cases of n no greater than this value.
     n_update - a function to determine next value of n based on current
         value of n. This function is assumed to increase values of n.
-    repetitions - this value is passed as number to timeit. Be careful what you use
-        here as the times grow quickly. The default of 1 should be fine.
-    time_cutoff_exponential - once the time for the exponential algorithm exceeds
-        this value, it will just compare the other two.
+    repetitions - this value is passed as number to timeit. Be careful what
+        you use here as the times grow quickly. The default of 1 should be
+        fine if you are considering large values of n.
+    time_cutoff_exponential - once the time for the exponential algorithm
+        exceeds this value, it will just compare the other two.
     """
     n = n_min
     include_exponential = True
